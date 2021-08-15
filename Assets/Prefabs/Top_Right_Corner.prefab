@@ -55,9 +55,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5216530061950167020, guid: 44de91a076ac9374798e4ea859f90513, type: 3}
+      propertyPath: buildable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5216530061950167020, guid: 44de91a076ac9374798e4ea859f90513, type: 3}
+      propertyPath: isOccupied
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8404563691402920590, guid: 44de91a076ac9374798e4ea859f90513, type: 3}
       propertyPath: m_Name
-      value: Tile_Road_Corner
+      value: Top_Right_Corner
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44de91a076ac9374798e4ea859f90513, type: 3}

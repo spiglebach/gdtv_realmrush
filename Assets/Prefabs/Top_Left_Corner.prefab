@@ -11,6 +11,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Top_Left_Corner
       objectReference: {fileID: 0}
+    - target: {fileID: 3486876799926553182, guid: 2ffc0162a110f154b815213bc08468c6, type: 3}
+      propertyPath: buildable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3486876799926553182, guid: 2ffc0162a110f154b815213bc08468c6, type: 3}
+      propertyPath: isOccupied
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6450916156955704085, guid: 2ffc0162a110f154b815213bc08468c6, type: 3}
       propertyPath: m_LocalRotation.w
       value: -0.7071068

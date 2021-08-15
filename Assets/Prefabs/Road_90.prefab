@@ -75,5 +75,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Road_90
       objectReference: {fileID: 0}
+    - target: {fileID: 7841062447561054652, guid: b8457324e3be61f4a933202683dd1317, type: 3}
+      propertyPath: buildable
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8457324e3be61f4a933202683dd1317, type: 3}
