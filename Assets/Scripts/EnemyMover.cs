@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyMover : MonoBehaviour {
     [SerializeField] private List<Waypoint> path;
-    [SerializeField] private float transitionTime = 1f;
+    [SerializeField][Range(0f,5f)] private float speed = 1f;
     
     void Start() {
         StartCoroutine(PrintWaypointNames());
@@ -12,8 +12,22 @@ public class EnemyMover : MonoBehaviour {
 
     IEnumerator PrintWaypointNames() {
         foreach (var waypoint in path) {
-            transform.SetPositionAndRotation(waypoint.transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(transitionTime);
+            Vector3 startPosition = transform.position;
+            Vector3 endPosition = waypoint.transform.position;
+            //transform.LookAt(endPosition);
+            Vector3 directionVector = endPosition - startPosition;
+            Quaternion rotation = Quaternion.identity;
+            if (directionVector.sqrMagnitude > Mathf.Epsilon) {
+                rotation = Quaternion.LookRotation(directionVector, Vector3.up);
+            }
+            float travelProgress = 0f;
+            while (travelProgress < 1f) {
+                travelProgress += Time.deltaTime * speed;
+                transform.SetPositionAndRotation(
+                    Vector3.Lerp(startPosition, endPosition, travelProgress),
+                    rotation);
+                yield return new WaitForEndOfFrame();
+            }
         }
     }
 
