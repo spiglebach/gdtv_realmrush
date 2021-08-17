@@ -1,8 +1,8 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 [ExecuteAlways]
+[RequireComponent(typeof(TextMeshPro))]
 public class CoordinateLabeler : MonoBehaviour {
     private TextMeshPro label;
     private Vector2Int coordinates = new Vector2Int();
@@ -19,7 +19,7 @@ public class CoordinateLabeler : MonoBehaviour {
     }
 
     void Update() {
-        ColorCoordinates();
+        SetLabelColor();
         ToggleLabels();
         if (Application.isPlaying) return;
         // in edit mode
@@ -27,7 +27,7 @@ public class CoordinateLabeler : MonoBehaviour {
         UpdateObjectName();
     }
 
-    private void ColorCoordinates() {
+    private void SetLabelColor() {
         if (!waypoint) return;
         label.color = waypoint.IsBuildable ? defaultColor : blockedColor;
     }
