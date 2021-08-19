@@ -62,6 +62,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbd40dbeaa370844583644674483d952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  towerCost: 50
+  partBuildTimeInSeconds: 1
+  buildingBase: {fileID: 8293807043288370748}
+  buildingTop: {fileID: 6131056645070147807}
 --- !u!1 &6131056645070147807
 GameObject:
   m_ObjectHideFlags: 0
