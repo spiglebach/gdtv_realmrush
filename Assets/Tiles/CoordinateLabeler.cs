@@ -45,10 +45,11 @@ public class CoordinateLabeler : MonoBehaviour {
     }
 
     private void DisplayCoordinates() {
+        if (!gridManager) return;
         var parentPosition = transform.parent.position;
-        var snapSettings = UnityEditor.EditorSnapSettings.move;
-        coordinates.x = Mathf.RoundToInt(parentPosition.x / snapSettings.x);
-        coordinates.y = Mathf.RoundToInt(parentPosition.z / snapSettings.z);
+        
+        coordinates.x = Mathf.RoundToInt(parentPosition.x / gridManager.UnityGridSize);
+        coordinates.y = Mathf.RoundToInt(parentPosition.z / gridManager.UnityGridSize);
         label.text = $"x,y\n{coordinates.x.ToString()},{coordinates.y.ToString()}";
     }
 

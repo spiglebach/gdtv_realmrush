@@ -4,40 +4,45 @@ using UnityEngine;
 
 [RequireComponent(typeof(Enemy))]
 public class EnemyMover : MonoBehaviour {
-    [SerializeField] private List<Waypoint> path = new List<Waypoint>();
     [SerializeField][Range(0f,5f)] private float speed = 1f;
 
+    private List<Node> path = new List<Node>();
     private Enemy enemy;
+    private GridManager gridManager;
+    private Pathfinder pathfinder;
     
     void OnEnable() {
-        FindPath();
         ReturnToStart();
+        RecalculatePath(true);
+    }
+
+    private void Awake() {
+        enemy = GetComponent<Enemy>();
+        gridManager = FindObjectOfType<GridManager>();
+        pathfinder = FindObjectOfType<Pathfinder>();
+    }
+
+    private void RecalculatePath(bool resetPath) {
+        Vector2Int coordinates = new Vector2Int();
+        if (resetPath) {
+            coordinates = pathfinder.StartCoordinates;
+        } else {
+            coordinates = gridManager.GetCoordinatesFromPosition(transform.position);
+        }
+        StopAllCoroutines();
+        path.Clear();
+        path = pathfinder.GetNewPath(coordinates);
         StartCoroutine(FollowPath());
     }
 
-    private void Start() {
-        enemy = GetComponent<Enemy>();
-    }
-
-    private void FindPath() {
-        path.Clear();
-        GameObject parent = GameObject.FindGameObjectWithTag("Path");
-        foreach (Transform child in parent.transform) {
-            Waypoint waypoint = child.GetComponent<Waypoint>();
-            if (waypoint) {
-                path.Add(waypoint);
-            }
-        }
-    }
-
     private void ReturnToStart() {
-        transform.SetPositionAndRotation(path[0].transform.position, Quaternion.identity);
+        transform.SetPositionAndRotation(gridManager.GetPositionFromCoordinates(pathfinder.StartCoordinates), Quaternion.identity);
     }
 
     IEnumerator FollowPath() {
-        foreach (var waypoint in path) {
+        for (int i = 1; i < path.Count; i++) {
             Vector3 startPosition = transform.position;
-            Vector3 endPosition = waypoint.transform.position;
+            Vector3 endPosition = gridManager.GetPositionFromCoordinates(path[i].coordinate);
             //transform.LookAt(endPosition);
             Vector3 directionVector = endPosition - startPosition;
             Quaternion rotation = Quaternion.identity;

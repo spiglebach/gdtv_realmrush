@@ -4,6 +4,8 @@ using UnityEngine;
 public class Pathfinder : MonoBehaviour {
     [SerializeField] private Vector2Int startCoordinates;
     [SerializeField] private Vector2Int destinationCoordinates;
+    public Vector2Int StartCoordinates => startCoordinates;
+    public Vector2Int DestinationCoordinates => destinationCoordinates;
     
     private Node startNode;
     private Node destinationNode;
@@ -17,13 +19,20 @@ public class Pathfinder : MonoBehaviour {
 
     private void Awake() {
         gridManager = FindObjectOfType<GridManager>();
+        if (gridManager) {
+            startNode = gridManager.GetNode(startCoordinates);
+            destinationNode = gridManager.GetNode(destinationCoordinates);
+        }
     }
 
     void Start() {
-        startNode = gridManager.GetNode(startCoordinates);
-        destinationNode = gridManager.GetNode(destinationCoordinates);
-        BreadthFirstSearch();
-        BuildPath();
+        GetNewPath(startCoordinates);
+    }
+
+    public List<Node> GetNewPath(Vector2Int coordinates) {
+        gridManager.ResetNodes();
+        BreadthFirstSearchFrom(coordinates);
+        return BuildPath();
     }
 
     private void ExploreNeighbors() {
@@ -44,10 +53,16 @@ public class Pathfinder : MonoBehaviour {
         }
     }
 
-    void BreadthFirstSearch() {
+    void BreadthFirstSearchFrom(Vector2Int coordinates) {
+        Node currentStartingNode = gridManager.GetNode(coordinates);
+        currentStartingNode.isWalkable = true;
+        destinationNode.isWalkable = true;
+        frontier.Clear();
+        reached.Clear();
+        
         bool isRunning = true;
-        frontier.Enqueue(startNode);
-        reached.Add(startCoordinates, startNode);
+        frontier.Enqueue(currentStartingNode);
+        reached.Add(coordinates, currentStartingNode);
 
         while (frontier.Count > 0 && isRunning) {
             currentSearchNode = frontier.Dequeue();
@@ -74,5 +89,25 @@ public class Pathfinder : MonoBehaviour {
 
         path.Reverse();
         return path;
+    }
+
+    public bool WillBlockPath(Vector2Int coordinates) {
+        var node = gridManager.GetNode(coordinates);
+        if (node != null) {
+            bool previousState = node.isWalkable;
+            node.isWalkable = false;
+            List<Node> newPath = GetNewPath(startCoordinates);
+            node.isWalkable = previousState;
+
+            if (newPath.Count <= 1) {
+                GetNewPath(startCoordinates);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void NotifyRecievers() {
+        BroadcastMessage("RecalculatePath", false, SendMessageOptions.DontRequireReceiver);
     }
 }
